@@ -12,14 +12,21 @@ def quote_str(arg):
 
 class ReprMixin:
     """
-    An universal and dynamic __repr__ method, generates the object constructor.
+    Dynamic __repr__ method, generates object's constructor call.
     
-    The method generates the object constructor with fields as arguments.
-    Fields to display have to be specified in order in _attrs_filter and
-    only object-defined fields are printed.
-    
-    The method properly quotes str values.
-    Optionally set _attrs_ignore_empty to hide empty/None values.
+    The method generates the object's constructor call with fields as arguments.
+    Fields to display have to be specified in order by including them in
+    _attrs_filter list property.
+
+    Only fields defined directly in the object are considered to be printed.
+    Optionally set _attrs_ignore_empty to avoid printing empty/None values.
+
+    Example (more examples in tests directory):
+
+        class MyReprClass(ReprMixin):
+            name: str = None
+            age: int = None
+
     """
     _attrs_filter = []
     _attrs_ignore_empty = False
@@ -51,7 +58,7 @@ class ReprMixin:
 
 
 class EqualityMixin:
-    """" Delivers __eq__
+    """" Delivers __eq__ which compares by (selected) fields value.
 
     Compares only fields as defined by self._compare_fields property.
     You may copy the list from ReprMixin fields _attrs_filter and optionally
@@ -60,7 +67,8 @@ class EqualityMixin:
     _compare_fields = copy.copy(_attrs_filter)
     _compare_fields.remove('name')
 
-    It does not compare fields when the other object has it None or undefined.
+    It does not compare fields when the other object has it it set to
+    None or undefined.
     """
     _compare_fields = []
 
