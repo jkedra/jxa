@@ -21,11 +21,17 @@ class ReprMixin:
     Only fields defined directly in the object are considered to be printed.
     Optionally set _attrs_ignore_empty to avoid printing empty/None values.
 
+    Fields:                 Methods
+    _attrs_filter        =  repr_add_attr(str or iterable)
+    _attrs_ignore_empty  =  repr_ignore_empty_attrs(bool)
+
     Example (more examples in tests directory):
 
         class MyReprClass(ReprMixin):
             name: str = None
             age: int = None
+            ReprMixin.repr_add_attr('name age'.split())
+            ReprMixin.repr_ignore_empty_attrs()
 
     """
     _attrs_filter = []

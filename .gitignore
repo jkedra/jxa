@@ -4,3 +4,5 @@ afiedt.buf
 *.swp
 .idea
 .python-version
+build
+dist

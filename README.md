@@ -1,15 +1,31 @@
 # Generic Development Libraries
 
 Here is a set of libraries I use in my projects.
-For now I am starting with two of them. A set of useful mixings
-and useful progress reporting library.
+For now I am starting with two of them: A set of useful mixings
+and a progress reporting library.
 
 
 ## genmixin
 
-Helper mixings which do similar things you may find in [dataclasses] library.
-My version is lightest and simplest than the [dataclass].
-May be injected into any class, not just data classes.
+Helper mixings which do similar things you may find in [dataclasses]
+library (implemented in [Python 3.7][dataclass]).
+My mixings are ligher, simpler and more general.
+May be injected into any class. 
+
+### ReprMixin
+
+Dynamic `__repr__` method, the method generates the object's
+constructor call with fields as constructor's arguments.
+Fields to display have to be specified by including them in
+`_attrs_filter` list property (use `repr_add_attr()` class method).
+
+Only fields defined directly in the object are considered to be printed.
+Optionally set `_attrs_ignore_empty` (`repr_ignore_empty_attr()`)
+to avoid printing empty/`None` values.
+
+    Fields:                 Methods
+    _attrs_filter        =  repr_add_attr(str or iterable)
+    _attrs_ignore_empty  =  repr_ignore_empty_attrs(bool)
 
 Example:
 
@@ -35,13 +51,14 @@ Example:
 Do not set back `husband.spouse = wife` for it throws
 `RecursionError`. I don't have clear idea yet how to approach it.
     
-## EqualityMixin
+### EqualityMixin
 
-Delivers `__eq__` which compares by (selected) fields value.
+Implements `__eq__` in a class by comparing its object's fields value.
+The `__eq__` compares only fields as defined by `self._compare_fields`
+property.
 
-Compares only fields as defined by `self._compare_fields` property.
-You may copy the list from `ReprMixin` fields `_attrs_filter`
-and optionally add/remove fields of your choice.
+If `ReprMixin` has been used, you may make usage of its field
+`_attrs_filter` and then optionally add/remove fields of your choice.
 
     _compare_fields = copy.copy(_attrs_filter)
     _compare_fields.remove('name')
